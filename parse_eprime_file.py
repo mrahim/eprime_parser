@@ -69,7 +69,7 @@ def parse_data_eprime(filename):
 
 
 ##############################################################################
-""" Parsing all subjects and saving :
+""" Parsing all the subjects and saving :
     - a session csv per subject 
     - a whole subject header csv 
 """
@@ -104,10 +104,10 @@ file_list = glob.glob(os.path.join(BASE_DIR, '*.txt'))
 for fn in file_list:
     h, fname = os.path.split(fn)
     print fname
-    
+
     # Parse data (df) and header informations (hd)
     df, hd = parse_data_eprime(fn)
-    
+
     # Add informations about the first onset (if available)
     hd['PP.Onset'] = ''
     if 'PicturePrime.OnsetTime' in df.keys():
@@ -115,21 +115,22 @@ for fn in file_list:
 
     # Add informations about the corrected subject id
     hd['c_Subject'], hd['c_SessionDate'] = parse_and_correct_file_id_eprime(fn)
-    
+
     # Number of trials in order to check the experimentation integrity
     hd['nbTrials'] = np.str(df['TrialList'].count())
 
-    # Append each subject    
+    # Append each subject
     header = header.append(hd, ignore_index=True)
-    
-    
+
+
     # Save the raw exprimentation data of the current subject
     df.to_csv(os.path.join(DST_BASE_DIR, fname + '.csv'), sep=',')
-                           
+
     # Save the selected data if the current subject
     if hd['nbTrials'] == '66':
         df.to_csv(os.path.join(DST_BASE_DIR, 'c_' + fname + '.csv'),
                   sep=',', columns=eprime_selected_cols)
+
 
 # Save all subjects meta-data
 header.to_csv(os.path.join(DST_BASE_DIR, 'all_subjects.csv'), sep=',')

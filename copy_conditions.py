@@ -13,8 +13,19 @@ for f in os.listdir(BASE_DIR):
     subject_id = f.split('_')[0]
     dst_dir = os.path.join(DST_BASE_DIR, subject_id, 'MRI', 'MID')
     if os.path.isdir(dst_dir):
+        analysis_dir = os.path.join(dst_dir, 'ANALYSIS')
         dst_dir = os.path.join(dst_dir, 'MAT')
-        if not os.path.isdir(dst_dir):
-            os.mkdir(dst_dir)
+        if os.path.isdir(os.path.join(dst_dir, 'ANALYSIS')):
+            shutil.rmtree(os.path.join(dst_dir, 'ANALYSIS'))
+
+        if not os.path.isdir(analysis_dir):
+            #os.mkdir(dst_dir)
+            os.mkdir(analysis_dir)
         shutil.copyfile(fpath, os.path.join(dst_dir, f))
         print os.path.join(dst_dir, f)
+        if os.path.splitext(f)[1]=='.xlsx':
+            os.remove(os.path.join(dst_dir, f))
+        if  os.path.isfile(os.path.join(dst_dir,
+                                        '_'.join([subject_id, 'cond.mat']))):
+            os.remove(os.path.join(dst_dir,
+                                        '_'.join([subject_id, 'cond.mat'])))

@@ -33,6 +33,7 @@ import numpy as np
 from scipy import io
 import matplotlib.pyplot as plt
 import pandas as pd
+import xlsxwriter
 from nipy.modalities.fmri import design_matrix
 from nipy.modalities.fmri.experimental_paradigm import BlockParadigm
 
@@ -52,7 +53,34 @@ def check_subject_eprime(eprime_file, mapping):
     """
     eprime_nb = eprime_file.split('/')[-1].split('.')[0].rsplit('-')[-2]
     res = mapping[mapping['eprime'] == int(eprime_nb)]['subject'].values
-    return res
+    return res, eprime_nb
+
+
+
+def generate_multiconditions_excel(output_file, conditions, onset, condition):
+    """Generate a *.xlsx file which contains the conditions
+    """
+    work = xlsxwriter.Workbook(output_file + '.xlsx')
+    wsheet = work.add_worksheet('Conditions')
+    col = 0
+    for key in conditions.keys():
+        wsheet.write(0, col, key)
+        row = 1
+        for item in conditions[key]:
+            wsheet.write(row, col, item)
+            row += 1
+        col += 1
+        
+    wsheet2 = work.add_worksheet('Timeline')
+    order = onset.argsort()
+    wsheet2.write(0, 0, 'onset')
+    wsheet2.write(0, 1, 'condition')
+    row = 1
+    for i in order:
+        wsheet2.write(row, 0, onset[i])
+        wsheet2.write(row, 1, condition[i])
+        row += 1
+    work.close()
 
 
 def generate_multiregressors_mat(output_file, regressors):
@@ -253,11 +281,16 @@ def compute_mid_conditions(filename):
     return conditions, durations
 
 ##############################################################################
+##############################################################################
+##############################################################################
+##############################################################################
+##############################################################################
 
 # Load eprime csv file
 file_list = glob.glob(os.path.join(BASE_DIR, 'c_*.csv'))
 
 for f in file_list:
+    print f
 
     # Compute conditions    
     conditions, durations = compute_mid_conditions(f)
@@ -266,7 +299,10 @@ for f in file_list:
     mapping = pd.read_csv(os.path.join('eprime_files', 'mapping.csv'),
                           names=['eprime','subject'])
     
-    subject_id = check_subject_eprime(f, mapping)
+    subject_id, eprime_id = check_subject_eprime(f, mapping)
+    
+    print subject_id, eprime_id
+    
     if len(subject_id)>0:
         print subject_id[0]
         filepath = os.path.join('movement_files', 
@@ -279,35 +315,39 @@ for f in file_list:
             generate_multiregressors_mat(output_file, regressors)
     
 
-    # Create paradigms   
-    condition = []
-    onset = []
-    duration = []
-    for c in conditions:
-        condition += [c]*len(conditions[c])
-        onset = np.hstack([onset, conditions[c]])
-        duration += [durations[c]]*len(conditions[c])
-
-    paradigm = BlockParadigm(con_id=condition,
-                             onset=onset,
-                             duration=duration)
-                               
-    frametimes = np.linspace(0, (N_SCANS-1)*TR/1000., num=N_SCANS)
-    design_mat = design_matrix.make_dmtx(frametimes, paradigm,
-                                     hrf_model='Canonical',
-                                     drift_model='Cosine',
-                                     hfcut=128)
-                                     
-    output_file = os.path.join(DST_BASE_DIR,
-                               f.split('/')[-1].split('.')[0])
-
-    generate_multiconditions_mat(output_file, conditions, durations)
-
-    fig_title = f.split('/')[-1].split('.')[0]
-    if len(subject_id)>0:
-        fig_title += '-S'+ str(subject_id[0])
-        output_file_s = os.path.join(DST_BASE_DIR,
-                                     ''.join(['S',str(subject_id[0]),'_cond']))        
-        generate_multiconditions_mat(output_file_s, conditions, durations)
-    design_mat.show()
-    plt.title(fig_title)
+        # Create paradigms   
+        condition = []
+        onset = []
+        duration = []
+        for c in conditions:
+            condition += [c]*len(conditions[c])
+            onset = np.hstack([onset, conditions[c]])
+            duration += [durations[c]]*len(conditions[c])
+    
+        paradigm = BlockParadigm(con_id=condition,
+                                 onset=onset,
+                                 duration=duration)
+                                   
+        frametimes = np.linspace(0, (N_SCANS-1)*TR/1000., num=N_SCANS)
+    
+        design_mat = design_matrix.make_dmtx(frametimes, paradigm,
+                                         hrf_model='Canonical',
+                                         drift_model='Cosine',
+                                         hfcut=128)
+                                         
+        output_file = os.path.join(DST_BASE_DIR,
+                                   f.split('/')[-1].split('.')[0])
+    
+        generate_multiconditions_mat(output_file, conditions, durations)
+        generate_multiconditions_excel(output_file, conditions, onset, condition)
+    
+        fig_title = f.split('/')[-1].split('.')[0]
+        if len(subject_id)>0:
+            fig_title += '-S'+ str(subject_id[0])
+            output_file_s = os.path.join(DST_BASE_DIR,
+                                         ''.join(['S',str(subject_id[0]),
+                                         '_', str(eprime_id), '_cond']))        
+            generate_multiconditions_mat(output_file_s, conditions, durations)
+            generate_multiconditions_excel(output_file_s, conditions, onset, condition)
+        #design_mat.show()
+        #plt.title(fig_title)

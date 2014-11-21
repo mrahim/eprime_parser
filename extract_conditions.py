@@ -109,7 +109,7 @@ def compute_mid_conditions(filename):
     # Extract hits, misses and noresps
     # hits
     hit = np.zeros(len(df))
-    h_idx = df[df['PictureTarget.CRESP'] == df['PictureTarget.RESP']]['TrialList']
+    h_idx = df[df['PictureTarget.RESP'].notnull()]['TrialList']
     hit[h_idx.values - 1] = 1
     
     # noresps
@@ -119,7 +119,7 @@ def compute_mid_conditions(filename):
     
     # misses
     miss = np.zeros(len(df))
-    m_idx = df[df['PictureTarget.CRESP'] + df['PictureTarget.RESP'] == 9 ]['TrialList']
+    m_idx = df[df['PictureTarget.RESP'].isnull()]['TrialList']
     miss[m_idx.values - 1] = 1
     
     # Extract bigwins, smallwins and nowins
@@ -219,6 +219,7 @@ def compute_mid_conditions(filename):
     """
     
     #XXX As the missed case is often missing, we won't use it at this time
+    #XXX missed case has been corrected
     
     conditions = {'anticip_hit_largewin' : anticip_hit_largewin,
                   'anticip_hit_smallwin' : anticip_hit_smallwin,
@@ -237,18 +238,24 @@ def compute_mid_conditions(filename):
                   'press_left' : press_left,
                   'press_right' : press_right}
    """
-   
+
     conditions['anticip_hit_largewin'] = anticip_hit_largewin
     conditions['anticip_hit_smallwin'] = anticip_hit_smallwin
     conditions['anticip_hit_nowin'] = anticip_hit_nowin
+    conditions['anticip_missed_largewin'] = anticip_missed_largewin
+    conditions['anticip_missed_smallwin'] = anticip_missed_smallwin
+    conditions['anticip_missed_nowin'] = anticip_missed_nowin
     conditions['anticip_noresp'] = anticip_noresp
     conditions['feedback_hit_largewin'] = feedback_hit_largewin
     conditions['feedback_hit_smallwin'] = feedback_hit_smallwin
     conditions['feedback_hit_nowin'] = feedback_hit_nowin
+    conditions['feedback_missed_largewin'] = feedback_missed_largewin
+    conditions['feedback_missed_smallwin'] = feedback_missed_smallwin
+    conditions['feedback_missed_nowin'] = feedback_missed_nowin
     conditions['feedback_noresp'] = feedback_noresp
     conditions['press_left'] = press_left
     conditions['press_right'] = press_right
-
+   
 
     durations =  OrderedDict()
     
@@ -301,10 +308,10 @@ for f in file_list:
     
     subject_id, eprime_id = check_subject_eprime(f, mapping)
     
-    print subject_id, eprime_id
+    #print subject_id, eprime_id
     
     if len(subject_id)>0:
-        print subject_id[0]
+        #print subject_id[0]
         filepath = os.path.join('movement_files', 
                                 ''.join(['S',str(subject_id[0]), '_reg.csv']))
         if os.path.isfile(filepath):
@@ -351,3 +358,4 @@ for f in file_list:
             generate_multiconditions_excel(output_file_s, conditions, onset, condition)
         #design_mat.show()
         #plt.title(fig_title)
+        print [len(conditions[k]) for k in conditions.keys()]

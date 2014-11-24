@@ -99,6 +99,10 @@ def generate_multiconditions_mat(output_file, conditions, ddurations):
             names[i] = conditions.keys()[i]
             onsets[i] = conditions[names[i]]
             durations[i] = ddurations[names[i]]
+            if len(onsets[i])==0:
+                durations[i] = 0.
+                onsets[i] = [3600.]
+                print output_file
     io.savemat(output_file, {'names' : names,
                              'onsets' : onsets,
                              'durations' : durations})
@@ -297,7 +301,7 @@ def compute_mid_conditions(filename):
 file_list = glob.glob(os.path.join(BASE_DIR, 'c_*.csv'))
 
 for f in file_list:
-    print f
+    #print f
 
     # Compute conditions    
     conditions, durations = compute_mid_conditions(f)
@@ -358,4 +362,4 @@ for f in file_list:
             generate_multiconditions_excel(output_file_s, conditions, onset, condition)
         #design_mat.show()
         #plt.title(fig_title)
-        print [len(conditions[k]) for k in conditions.keys()]
+        #print [len(conditions[k]) for k in conditions.keys()]

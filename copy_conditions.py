@@ -6,7 +6,7 @@
 import os, shutil
 
 BASE_DIR = os.path.join('eprime_files', 'mat')
-DST_BASE_DIR = os.path.join('/', 'shfj', 'Ppsypim', 'PSYDAT', 'Subjects')
+DST_BASE_DIR = os.path.join('/', 'home', 'Ppsypim', 'PSYDAT', 'Subjects')
 
 for f in os.listdir(BASE_DIR):
     fpath = os.path.join(BASE_DIR, f)

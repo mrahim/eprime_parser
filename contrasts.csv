@@ -13,24 +13,24 @@ anticip_hit_smallwin-nowin,0,1,-1,0,0,0,0,0,0,0,0,0,0,0
 anticip_missed_largewin-smallwin,0,0,0,1,-1,0,0,0,0,0,0,0,0,0
 anticip_missed_largewin-nowin,0,0,0,1,0,-1,0,0,0,0,0,0,0,0
 anticip_missed_smallwin-nowin,0,0,0,0,1,-1,0,0,0,0,0,0,0,0
-anticip – anticip_noresp,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+anticip-anticip_noresp,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 feedback,0,0,0,0,0,0,1,1,1,1,1,1,0,0
 feedback_hit,0,0,0,0,0,0,1,1,1,0,0,0,0,0
 feedback_missed,0,0,0,0,0,0,0,0,0,1,1,1,0,0
 feedback_hit-missed,0,0,0,0,0,0,1,1,1,-1,-1,-1,0,0
 feedback_missed-hit,0,0,0,0,0,0,-1,-1,-1,1,1,1,0,0
-feedback_hit_largewin – smallwin,0,0,0,0,0,0,1,-1,0,0,0,0,0,0
-feedback_hit_largewin – nowin,0,0,0,0,0,0,1,0,-1,0,0,0,0,0
-feedback_hit_smallwin – nowin,0,0,0,0,0,0,0,1,-1,0,0,0,0,0
+feedback_hit_largewin-smallwin,0,0,0,0,0,0,1,-1,0,0,0,0,0,0
+feedback_hit_largewin-nowin,0,0,0,0,0,0,1,0,-1,0,0,0,0,0
+feedback_hit_smallwin-nowin,0,0,0,0,0,0,0,1,-1,0,0,0,0,0
 feedback_missed_largewin-smallwin,0,0,0,0,0,0,0,0,0,1,-1,0,0,0
 feedback_missed_largewin-nowin,0,0,0,0,0,0,0,0,0,1,0,-1,0,0
 feedback_missed_smallwin-nowin,0,0,0,0,0,0,0,0,0,0,1,-1,0,0
-press L + R,0,0,0,0,0,0,0,0,0,0,0,0,1,1
-press L – R,0,0,0,0,0,0,0,0,0,0,0,0,1,-1
-press R – L,0,0,0,0,0,0,0,0,0,0,0,0,-1,1
-anticip_hit_somewin – nowin,1,1,-2,0,0,0,0,0,0,0,0,0,0,0
+press L+R,0,0,0,0,0,0,0,0,0,0,0,0,1,1
+press L-R,0,0,0,0,0,0,0,0,0,0,0,0,1,-1
+press R-L,0,0,0,0,0,0,0,0,0,0,0,0,-1,1
+anticip_hit_somewin-nowin,1,1,-2,0,0,0,0,0,0,0,0,0,0,0
 anticip_missed_somewin-nowin,0,0,0,1,1,-2,0,0,0,0,0,0,0,0
-feedback_hit_somewin – nowin,0,0,0,0,0,0,1,1,-2,0,0,0,0,0
+feedback_hit_somewin-nowin,0,0,0,0,0,0,1,1,-2,0,0,0,0,0
 feedback_missed_somewin-nowin,0,0,0,0,0,0,0,0,0,1,1,-2,0,0
 feedback_somewin_hit-missed,0,0,0,0,0,0,1,1,0,-1,-1,0,0,0
 feedback_somewin_missed-hit,0,0,0,0,0,0,-1,-1,0,1,1,0,0,0
@@ -39,10 +39,10 @@ anticip_hit_largewin,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 -anticip_hit_largewin,-1,0,0,0,0,0,0,0,0,0,0,0,0,0
 feedback_hit_largewin,0,0,0,0,0,0,1,0,0,0,0,0,0,0
 -feedback_hit_largewin,0,0,0,0,0,0,-1,0,0,0,0,0,0,0
-anticip_hit_largewin – feedback_hit_largewin,1,0,0,0,0,0,-1,0,0,0,0,0,0,0
-feedback_hit_largewin – anticip_hit_largewin,-1,0,0,0,0,0,1,0,0,0,0,0,0,0
-anticip_hit_nowin – feedback_hit_nowin,0,0,1,0,0,0,0,0,-1,0,0,0,0,0
-feedback_hit_nowin  anticip_hit_nowin,0,0,-1,0,0,0,0,0,1,0,0,0,0,0
+anticip_hit_largewin-feedback_hit_largewin,1,0,0,0,0,0,-1,0,0,0,0,0,0,0
+feedback_hit_largewin-anticip_hit_largewin,-1,0,0,0,0,0,1,0,0,0,0,0,0,0
+anticip_hit_nowin-feedback_hit_nowin,0,0,1,0,0,0,0,0,-1,0,0,0,0,0
+feedback_hit_nowin-anticip_hit_nowin,0,0,-1,0,0,0,0,0,1,0,0,0,0,0
 anticip_largewin-smallwin (hit+missed),1,-1,0,1,-1,0,0,0,0,0,0,0,0,0
 anticip_largewin-nowin (hit+missed),1,0,-1,1,0,-1,0,0,0,0,0,0,0,0
 anticip_smallwin-nowin (hit+missed),0,1,-1,0,1,-1,0,0,0,0,0,0,0,0

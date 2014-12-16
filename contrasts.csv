@@ -36,9 +36,9 @@ feedback_somewin_hit-missed,0,0,0,0,0,0,1,1,0,-1,-1,0,0,0
 feedback_somewin_missed-hit,0,0,0,0,0,0,-1,-1,0,1,1,0,0,0
 feedback_somewin-nowin,0,0,0,0,0,0,1,1,-2,1,1,-2,0,0
 anticip_hit_largewin,1,0,0,0,0,0,0,0,0,0,0,0,0,0
-- anticip_hit_largewin,-1,0,0,0,0,0,0,0,0,0,0,0,0,0
-feedback_hit_largewin,0,0,0,0,0,0,1,0,0,0,0,0,0,
-- feedback_hit_largewin,0,0,0,0,0,0,-1,0,0,0,0,0,0,0
+-anticip_hit_largewin,-1,0,0,0,0,0,0,0,0,0,0,0,0,0
+feedback_hit_largewin,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+-feedback_hit_largewin,0,0,0,0,0,0,-1,0,0,0,0,0,0,0
 anticip_hit_largewin – feedback_hit_largewin,1,0,0,0,0,0,-1,0,0,0,0,0,0,0
 feedback_hit_largewin – anticip_hit_largewin,-1,0,0,0,0,0,1,0,0,0,0,0,0,0
 anticip_hit_nowin – feedback_hit_nowin,0,0,1,0,0,0,0,0,-1,0,0,0,0,0

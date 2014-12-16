@@ -53,6 +53,18 @@ for i in range(14):
     contrasts['%s' % design_mat.names[2 * i]] = np.eye(n_columns)[2 * i]
 
 # TODO : specify and estimate all contrasts
+# 1- load contrasts into pandas dataframe
+# 2- insert zero-columns of derivatives and regressors
+# 3- extract matrix :
+"""
+a = []
+for c in contrasts.keys():
+    if c != 'contrast':
+        a.append(contrasts[c].values)
+a = np.array(a)
+"""
+
+
 contrasts['press R-L'] = contrasts['press_right'] - contrasts['press_left']
 
 contrast_list = ['anticip',

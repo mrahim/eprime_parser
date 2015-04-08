@@ -19,13 +19,17 @@ import pypreprocess.reporting.glm_reporter as glm_reporter
 import pypreprocess.reporting.base_reporter as base_reporter
 
 DM_DIR = os.path.join('design_matrices')
+"""
 FMRI_DIR = os.path.join('/', 'disk4t', 'mehdi', 'data',
                         'psydat', 'preprocess_output')
+"""
+FMRI_DIR = os.path.join('/', 'media', 'CORSAIR', 'data', 'psydat')
 
 
 subject_path_list = sorted(glob.glob(os.path.join(FMRI_DIR, 'S*')))
 
-for subject_path in subject_path_list:
+
+for subject_path in subject_path_list[26:]:
     
     _, subj_id = os.path.split(subject_path)
     subj_id = subj_id[1:]
@@ -128,6 +132,8 @@ for subject_path in subject_path_list:
     
     
     # do stats report
+    if not os.path.isdir(os.path.join(subject_path, 'reports')):
+        os.mkdir(os.path.join(subject_path, 'reports'))
     stats_report_filename = os.path.join(subject_path, 'reports',
                                          "report_stats.html")
     glm_reporter.generate_subject_stats_report(

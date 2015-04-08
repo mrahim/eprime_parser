@@ -9,9 +9,9 @@ import os, glob
 import numpy as np
 import pandas as pd
 
-BASE_DIR = os.path.join('/', 'shfj', 'Ppsypim', 'PSYDAT',
-                        'Stats', 'eprime')#, 'eprime_files')
-DST_BASE_DIR = os.path.join('eprime_files', 'csv')
+BASE_DIR = os.path.join('/', 'home', 'Ppsypim', 'CAIMAN',
+                        'Stats', 'eprime', 'eprime_files')
+DST_BASE_DIR = os.path.join('eprime_files_caiman', 'csv')
 
 
 # File id and date Parser

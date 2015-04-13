@@ -38,16 +38,14 @@ from nipy.modalities.fmri import design_matrix
 from nipy.modalities.fmri.experimental_paradigm import BlockParadigm
 
 
-BASE_DIR = os.path.join('eprime_files_caiman', 'csv')
-DST_BASE_DIR = os.path.join('eprime_files_caiman', 'mat')
+BASE_DIR = os.path.join('eprime_files', 'csv')
+DST_BASE_DIR = os.path.join('eprime_files', 'mat')
 
 N_SCANS = 289
 TR = 2400.
 START_DELAY = 6000.
 TASK_DURATION = {'anticip': 4., 'feedback': 1.45}
 
-
-ANTICIP_DESIGN = True
 
 def check_subject_eprime(eprime_file, mapping):
     """A temporary function that checks if the eprime id 
@@ -245,22 +243,20 @@ def compute_mid_conditions(filename):
                   'press_right' : press_right}
    """
 
-    if ANTICIP_DESIGN:
-        conditions['anticip_hit_largewin'] = anticip_hit_largewin
-        conditions['anticip_hit_smallwin'] = anticip_hit_smallwin
-        conditions['anticip_hit_nowin'] = anticip_hit_nowin
-        conditions['anticip_missed_largewin'] = anticip_missed_largewin
-        conditions['anticip_missed_smallwin'] = anticip_missed_smallwin
-        conditions['anticip_missed_nowin'] = anticip_missed_nowin
-        #conditions['anticip_noresp'] = anticip_noresp
-    else:
-        conditions['feedback_hit_largewin'] = feedback_hit_largewin
-        conditions['feedback_hit_smallwin'] = feedback_hit_smallwin
-        conditions['feedback_hit_nowin'] = feedback_hit_nowin
-        conditions['feedback_missed_largewin'] = feedback_missed_largewin
-        conditions['feedback_missed_smallwin'] = feedback_missed_smallwin
-        conditions['feedback_missed_nowin'] = feedback_missed_nowin
-        #conditions['feedback_noresp'] = feedback_noresp
+    conditions['anticip_hit_largewin'] = anticip_hit_largewin
+    conditions['anticip_hit_smallwin'] = anticip_hit_smallwin
+    conditions['anticip_hit_nowin'] = anticip_hit_nowin
+    conditions['anticip_missed_largewin'] = anticip_missed_largewin
+    conditions['anticip_missed_smallwin'] = anticip_missed_smallwin
+    conditions['anticip_missed_nowin'] = anticip_missed_nowin
+    #conditions['anticip_noresp'] = anticip_noresp
+    conditions['feedback_hit_largewin'] = feedback_hit_largewin
+    conditions['feedback_hit_smallwin'] = feedback_hit_smallwin
+    conditions['feedback_hit_nowin'] = feedback_hit_nowin
+    conditions['feedback_missed_largewin'] = feedback_missed_largewin
+    conditions['feedback_missed_smallwin'] = feedback_missed_smallwin
+    conditions['feedback_missed_nowin'] = feedback_missed_nowin
+    #conditions['feedback_noresp'] = feedback_noresp
     conditions['press_left'] = press_left
     conditions['press_right'] = press_right
    
@@ -311,16 +307,16 @@ for f in file_list:
     conditions, durations = compute_mid_conditions(f)
 
     # Load regressors if they exist
-    mapping = pd.read_csv(os.path.join('eprime_files_caiman', 'mapping.csv'),
+    mapping = pd.read_csv(os.path.join('eprime_files', 'mapping.csv'),
                           names=['eprime','subject'])
     
     subject_id, eprime_id = check_subject_eprime(f, mapping)
-    subject_id = subject_id.astype(np.int)
+    
     #print subject_id, eprime_id
     
     if len(subject_id)>0:
         #print subject_id[0]
-        filepath = os.path.join('movement_files_caiman', 
+        filepath = os.path.join('movement_files', 
                                 ''.join(['S',str(subject_id[0]), '_reg.csv']))
         if os.path.isfile(filepath):
             reg = pd.read_csv(filepath)

@@ -17,7 +17,8 @@ import numpy as np
 import pandas as pd
 
 BASE_DIR = os.path.join('/', 'home', 'Ppsypim', 'PSYDAT', 'Subjects')
-DST_BASE_DIR = os.path.join('movement_files')
+BASE_DIR = os.path.join('movement_files_caiman')
+DST_BASE_DIR = os.path.join('movement_files_caiman')
 
 def parse_spm_mvt_file(filename):
     """ returns a DataFrame df which contains the movement regressors
@@ -50,13 +51,15 @@ def parse_spm_mvt_file(filename):
 ##############################################################################
 """ Parsing all the subjects and saving the regressors in a csv file
 """
-for subject in os.listdir(BASE_DIR):
-    mid_path = os.path.join(BASE_DIR, subject, 'MRI', 'MID')
-    rp_files = glob.glob(os.path.join(mid_path, '*.txt'))
 
-    if len(rp_files) > 0:
-        print rp_files
-        d = parse_spm_mvt_file(rp_files[0])
-        d.to_csv(os.path.join(DST_BASE_DIR,
-                              '_'.join([subject, 'reg.csv'])), sep=',')
-                
+
+
+rp_files = glob.glob(os.path.join(BASE_DIR, '*.txt'))
+
+for rp_file in rp_files:
+    _, filename = os.path.split(rp_file)
+    subject = filename.split('_')[1][1:]
+    print subject
+    d = parse_spm_mvt_file(rp_file)
+    d.to_csv(os.path.join(DST_BASE_DIR,
+                          '_'.join([subject, 'reg.csv'])), sep=',')

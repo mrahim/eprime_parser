@@ -38,16 +38,14 @@ from nipy.modalities.fmri import design_matrix
 from nipy.modalities.fmri.experimental_paradigm import BlockParadigm
 
 
-BASE_DIR = os.path.join('eprime_files_caiman', 'csv')
-DST_BASE_DIR = os.path.join('eprime_files_caiman', 'mat')
+BASE_DIR = os.path.join('eprime_files', 'csv')
+DST_BASE_DIR = os.path.join('eprime_files', 'mat')
 
 N_SCANS = 289
 TR = 2400.
 START_DELAY = 6000.
 TASK_DURATION = {'anticip': 4., 'feedback': 1.45}
 
-
-ANTICIP_DESIGN = True
 
 def check_subject_eprime(eprime_file, mapping):
     """A temporary function that checks if the eprime id 
@@ -245,22 +243,20 @@ def compute_mid_conditions(filename):
                   'press_right' : press_right}
    """
 
-    if ANTICIP_DESIGN:
-        conditions['anticip_hit_largewin'] = anticip_hit_largewin
-        conditions['anticip_hit_smallwin'] = anticip_hit_smallwin
-        conditions['anticip_hit_nowin'] = anticip_hit_nowin
-        conditions['anticip_missed_largewin'] = anticip_missed_largewin
-        conditions['anticip_missed_smallwin'] = anticip_missed_smallwin
-        conditions['anticip_missed_nowin'] = anticip_missed_nowin
-        #conditions['anticip_noresp'] = anticip_noresp
-    else:
-        conditions['feedback_hit_largewin'] = feedback_hit_largewin
-        conditions['feedback_hit_smallwin'] = feedback_hit_smallwin
-        conditions['feedback_hit_nowin'] = feedback_hit_nowin
-        conditions['feedback_missed_largewin'] = feedback_missed_largewin
-        conditions['feedback_missed_smallwin'] = feedback_missed_smallwin
-        conditions['feedback_missed_nowin'] = feedback_missed_nowin
-        #conditions['feedback_noresp'] = feedback_noresp
+    conditions['anticip_hit_largewin'] = anticip_hit_largewin
+    conditions['anticip_hit_smallwin'] = anticip_hit_smallwin
+    conditions['anticip_hit_nowin'] = anticip_hit_nowin
+    conditions['anticip_missed_largewin'] = anticip_missed_largewin
+    conditions['anticip_missed_smallwin'] = anticip_missed_smallwin
+    conditions['anticip_missed_nowin'] = anticip_missed_nowin
+    #conditions['anticip_noresp'] = anticip_noresp
+    conditions['feedback_hit_largewin'] = feedback_hit_largewin
+    conditions['feedback_hit_smallwin'] = feedback_hit_smallwin
+    conditions['feedback_hit_nowin'] = feedback_hit_nowin
+    conditions['feedback_missed_largewin'] = feedback_missed_largewin
+    conditions['feedback_missed_smallwin'] = feedback_missed_smallwin
+    conditions['feedback_missed_nowin'] = feedback_missed_nowin
+    #conditions['feedback_noresp'] = feedback_noresp
     conditions['press_left'] = press_left
     conditions['press_right'] = press_right
    
@@ -302,39 +298,38 @@ def compute_mid_conditions(filename):
 ##############################################################################
 
 # Load eprime csv file
-file_list = glob.glob(os.path.join(BASE_DIR, 'c_*.csv'))
+file_list = sorted(glob.glob(os.path.join(BASE_DIR, 'c_*.csv')))
 
 for f in file_list:
-    #print f
-
     # Compute conditions    
     conditions, durations = compute_mid_conditions(f)
 
     # Load regressors if they exist
-    mapping = pd.read_csv(os.path.join('eprime_files_caiman', 'mapping.csv'),
+    mapping = pd.read_csv(os.path.join('eprime_files', 'mapping.csv'),
                           names=['eprime','subject'])
     
     subject_id, eprime_id = check_subject_eprime(f, mapping)
-    subject_id = subject_id.astype(np.int)
-    #print subject_id, eprime_id
     
     if len(subject_id)>0:
-        #print subject_id[0]
-        filepath = os.path.join('movement_files_caiman', 
+        print subject_id[0]
+        filepath = os.path.join('movement_files', 
                                 ''.join(['S',str(subject_id[0]), '_reg.csv']))
         if os.path.isfile(filepath):
             reg = pd.read_csv(filepath)
             regressors = reg.values[:,1:]
-            output_file = os.path.join(DST_BASE_DIR, 
-                                       ''.join(['S',str(subject_id[0]),'_reg']))
-            generate_multiregressors_mat(output_file, regressors)
     
 
-        # Create paradigms   
+        # Create paradigms
+        empty_conditions = []
+        pseudo_empty_conditions = []
         condition = []
         onset = []
         duration = []
         for c in conditions:
+            if len(conditions[c]) < 1:
+                empty_conditions.append(c)
+            elif len(conditions[c]) < 2:
+                pseudo_empty_conditions.append(c)
             condition += [c]*len(conditions[c])
             onset = np.hstack([onset, conditions[c]])
             duration += [durations[c]]*len(conditions[c])
@@ -346,24 +341,67 @@ for f in file_list:
         frametimes = np.linspace(0, (N_SCANS-1)*TR/1000., num=N_SCANS)
     
         design_mat = design_matrix.make_dmtx(frametimes, paradigm,
-                                         hrf_model='Canonical',
+                                         hrf_model='Canonical with derivative',
+                                         add_regs=regressors,
                                          drift_model='Cosine',
                                          hfcut=128)
-                                         
-        output_file = os.path.join(DST_BASE_DIR,
-                                   f.split('/')[-1].split('.')[0])
     
-        generate_multiconditions_mat(output_file, conditions, durations)
-        generate_multiconditions_excel(output_file, conditions, onset, condition)
-    
-        fig_title = f.split('/')[-1].split('.')[0]
-        if len(subject_id)>0:
-            fig_title += '-S'+ str(subject_id[0])
-            output_file_s = os.path.join(DST_BASE_DIR,
-                                         ''.join(['S',str(subject_id[0]),
-                                         '_', str(eprime_id), '_cond']))        
-            generate_multiconditions_mat(output_file_s, conditions, durations)
-            generate_multiconditions_excel(output_file_s, conditions, onset, condition)
-        #design_mat.show()
-        #plt.title(fig_title)
-        #print [len(conditions[k]) for k in conditions.keys()]
+        
+        # Fill empty conditions
+        for c in empty_conditions:
+            if c == 'anticip_missed_largewin':
+                ind = 6
+            elif c == 'feedback_missed_largewin':
+                ind = 18
+            elif c == 'anticip_missed_smallwin':
+                ind = 10
+            elif c == 'feedback_missed_smallwin':
+                ind = 20
+            elif c == 'anticip_missed_nowin':
+                ind = 8
+            elif c == 'feedback_missed_nowin':
+                ind = 22
+            design_mat.matrix = np.insert(design_mat.matrix,
+                                          ind, 1, axis=1)
+            design_mat.matrix = np.insert(design_mat.matrix,
+                                          ind+1, 1, axis=1)
+            design_mat.names.insert(ind, c)
+            design_mat.names.insert(ind+1, c + '_derivative')
+ 
+
+        # Fill pseudo empty conditions
+        print empty_conditions
+        print pseudo_empty_conditions
+        for c in pseudo_empty_conditions:
+            if c == 'anticip_missed_largewin':
+                ind = 6
+            elif c == 'feedback_missed_largewin':
+                ind = 18
+            elif c == 'anticip_missed_smallwin':
+                ind = 10
+            elif c == 'feedback_missed_smallwin':
+                ind = 20
+            elif c == 'anticip_missed_nowin':
+                ind = 8
+            elif c == 'feedback_missed_nowin':
+                ind = 22
+            design_mat.matrix[:, ind] = np.ones(N_SCANS)
+            design_mat.matrix[:, ind+1] = np.ones(N_SCANS)
+
+
+        # Reorder conditions
+        for i in np.arange(2,21,6):
+            for j in range(2):
+                tmp = design_mat.matrix[:,i+j].copy()
+                design_mat.matrix[:,i+j] = design_mat.matrix[:,i+j+2]
+                design_mat.matrix[:,i+j+2] = tmp
+                design_mat.names[i+j], design_mat.names[i+j+2] = design_mat.names[i+j+2], design_mat.names[i+j]
+        design_mat.write_csv(os.path.join('design_matrices',
+                                          str(subject_id[0]) + '.csv'))
+
+
+        fig_title = 'S'+ str(subject_id[0])
+        design_mat.show()
+        plt.title(fig_title)
+        plt.set_cmap('gray')
+        plt.savefig(os.path.join('figures', fig_title+'.png'))

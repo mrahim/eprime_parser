@@ -305,7 +305,7 @@ def compute_mid_conditions(filename):
 file_list = glob.glob(os.path.join(BASE_DIR, 'c_*.csv'))
 
 for f in file_list:
-    #print f
+    print f
 
     # Compute conditions    
     conditions, durations = compute_mid_conditions(f)
@@ -316,7 +316,7 @@ for f in file_list:
     
     subject_id, eprime_id = check_subject_eprime(f, mapping)
     subject_id = subject_id.astype(np.int)
-    #print subject_id, eprime_id
+    print subject_id, eprime_id
     
     if len(subject_id)>0:
         #print subject_id[0]

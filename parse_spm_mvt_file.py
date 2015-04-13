@@ -16,7 +16,7 @@ import os, glob
 import numpy as np
 import pandas as pd
 
-BASE_DIR = os.path.join('/', 'home', 'Ppsypim', 'PSYDAT', 'Subjects')
+BASE_DIR = os.path.join('/', 'shfj', 'Ppsypim', 'CAIMAN', 'Subjects')
 BASE_DIR = os.path.join('movement_files_caiman')
 DST_BASE_DIR = os.path.join('movement_files_caiman')
 

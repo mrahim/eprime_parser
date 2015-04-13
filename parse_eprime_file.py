@@ -9,7 +9,7 @@ import os, glob
 import numpy as np
 import pandas as pd
 
-BASE_DIR = os.path.join('/', 'home', 'Ppsypim', 'CAIMAN',
+BASE_DIR = os.path.join('/', 'shfj', 'Ppsypim', 'CAIMAN',
                         'Stats', 'eprime', 'eprime_files')
 DST_BASE_DIR = os.path.join('eprime_files_caiman', 'csv')
 
@@ -133,9 +133,7 @@ for fn in file_list:
                   sep=',', columns=eprime_selected_cols)
 
 
-"""
 # Save all subjects meta-data
 header.to_csv(os.path.join(DST_BASE_DIR, 'all_subjects.csv'), sep=',')
 header.to_csv(os.path.join(DST_BASE_DIR, 'all_subjects_c.csv'), sep=',',
               columns=header_selected_cols)
-"""

@@ -23,8 +23,8 @@ if os.path.isfile('io_paths.ini'):
     BASE_DIR = paths['movement_txt_dir']
     DST_BASE_DIR = paths['movement_csv_dir']
 else:
-    BASE_DIR = 'movement_files_caiman'
-    DST_BASE_DIR = 'movement_files_caiman'
+    BASE_DIR = 'data/mvt'
+    DST_BASE_DIR = 'data/mvt'
 
 
 def parse_spm_mvt_file(filename):

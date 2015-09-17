@@ -41,7 +41,7 @@ if os.path.isfile('io_paths.ini'):
     BASE_DIR = paths['csv_output_dir']
     DST_BASE_DIR = paths['mat_output_dir']
     MAPPING_FILE = paths['subject_eprime_mapping']
-    MVT_CSV_DIR = paths['movement_files_dir']
+    MVT_CSV_DIR = paths['movement_csv_dir']
     ANTICIP_DESIGN = False
     FEEDBACK_DESIGN = False
     USE_NO_RESP = False
@@ -49,16 +49,16 @@ if os.path.isfile('io_paths.ini'):
         ANTICIP_DESIGN = True
     if paths['feedback_conditions'] == 'True':
         FEEDBACK_DESIGN = True
-    if paths['use_no_resp_condition'] == 'True':
+    if paths['no_resp_condition'] == 'True':
         USE_NO_RESP = True
 else:
-    BASE_DIR = 'eprime_files_caiman/csv'
-    DST_BASE_DIR = 'eprime_files_caiman/mat'
+    BASE_DIR = 'data/csv'
+    DST_BASE_DIR = 'data/mat'
     ANTICIP_DESIGN = True
     FEEDBACK_DESIGN = False
     USE_NO_RESP = False
-    MAPPING_FILE = 'eprime_files_caiman/mapping.csv'
-    MVT_CSV_DIR = 'movement_files_caiman'
+    MAPPING_FILE = 'data/mapping.csv'
+    MVT_CSV_DIR = 'data/mvt'
 
 N_SCANS = 289
 TR = 2400.

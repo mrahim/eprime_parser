@@ -13,7 +13,7 @@ if os.path.isfile('io_paths.ini'):
     paths = ConfigObj(infile='io_paths.ini')
     BASE_DIR = paths['eprime_files_dir']
 else:
-    BASE_DIR = '/home/Ppsypim/PSYDAT/Stats/eprime'
+    BASE_DIR = 'data/eprime'
 
 
 # Header Parsing Function

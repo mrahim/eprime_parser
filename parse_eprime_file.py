@@ -16,8 +16,8 @@ if os.path.isfile('io_paths.ini'):
     BASE_DIR = paths['eprime_files_dir']
     DST_BASE_DIR = paths['csv_output_dir']
 else:
-    BASE_DIR = '/home/Ppsypim/CAIMAN/Stats/eprime/eprime_files'
-    DST_BASE_DIR = 'eprime_files_caiman/csv'
+    BASE_DIR = 'data/eprime'
+    DST_BASE_DIR = 'data/csv'
 
 
 # File id and date Parser

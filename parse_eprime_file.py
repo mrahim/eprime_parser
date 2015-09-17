@@ -5,13 +5,19 @@ Functions to extract informations from e-prime files
 @author: Mehdi Rahim
 """
 
-import os, glob
+import os
+import glob
 import numpy as np
 import pandas as pd
+from configobj import ConfigObj
 
-BASE_DIR = os.path.join('/', 'home', 'Ppsypim', 'CAIMAN',
-                        'Stats', 'eprime', 'eprime_files')
-DST_BASE_DIR = os.path.join('eprime_files_caiman', 'csv')
+if os.path.isfile('io_paths.ini'):
+    paths = ConfigObj(infile='io_paths.ini')
+    BASE_DIR = paths['input_dir']
+    DST_BASE_DIR = paths['output_dir']
+else:
+    BASE_DIR = '/home/Ppsypim/CAIMAN/Stats/eprime/eprime_files'
+    DST_BASE_DIR = 'eprime_files_caiman/csv'
 
 
 # File id and date Parser
@@ -28,15 +34,16 @@ def parse_and_correct_file_id_eprime(filename):
             c_date += '-200' + file_id[4]
     return file_id, c_date
 
+
 # Quick and Dirty Parser
 def parse_data_eprime(filename):
     """ returns a dict of header informations and a DataFrame of values
     at the 3rd level of filename
     """
-    edf = pd.DataFrame() # Subject dataframe
+    edf = pd.DataFrame()  # Subject dataframe
     lvl = {}    # E-Prime level 3 dict
-    hdr = {} # Header dict
-    level_flag = -1 # Flag on the current header/level
+    hdr = {}  # Header dict
+    level_flag = -1  # Flag on the current header/level
     with open(filename, 'rU') as f:
         lines = [x.strip() for x in f.read().split('\n')]
         for line in lines:
@@ -71,8 +78,8 @@ def parse_data_eprime(filename):
 
 ##############################################################################
 """ Parsing all the subjects and saving :
-    - a session csv per subject 
-    - a whole subject header csv 
+    - a session csv per subject
+    - a whole subject header csv
 """
 
 header_selected_cols = ['c_Subject', 'Subject', 'c_SessionDate',
@@ -123,7 +130,6 @@ for fn in file_list:
     # Append each subject
     header = header.append(hd, ignore_index=True)
 
-
     # Save the raw exprimentation data of the current subject
     df.to_csv(os.path.join(DST_BASE_DIR, fname + '.csv'), sep=',')
 
@@ -131,11 +137,3 @@ for fn in file_list:
     if hd['nbTrials'] == '66':
         df.to_csv(os.path.join(DST_BASE_DIR, 'c_' + fname + '.csv'),
                   sep=',', columns=eprime_selected_cols)
-
-
-"""
-# Save all subjects meta-data
-header.to_csv(os.path.join(DST_BASE_DIR, 'all_subjects.csv'), sep=',')
-header.to_csv(os.path.join(DST_BASE_DIR, 'all_subjects_c.csv'), sep=',',
-              columns=header_selected_cols)
-"""

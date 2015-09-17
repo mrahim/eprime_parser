@@ -34,8 +34,6 @@ import numpy as np
 from scipy import io
 import pandas as pd
 import xlsxwriter
-from nipy.modalities.fmri import design_matrix
-from nipy.modalities.fmri.experimental_paradigm import BlockParadigm
 from configobj import ConfigObj
 
 if os.path.isfile('io_paths.ini'):
@@ -335,17 +333,6 @@ for f in file_list:
             condition += [c] * len(conditions[c])
             onset = np.hstack([onset, conditions[c]])
             duration += [durations[c]] * len(conditions[c])
-
-        paradigm = BlockParadigm(con_id=condition,
-                                 onset=onset,
-                                 duration=duration)
-
-        frametimes = np.linspace(0, (N_SCANS-1)*TR/1000., num=N_SCANS)
-
-        design_mat = design_matrix.make_dmtx(frametimes, paradigm,
-                                             hrf_model='Canonical',
-                                             drift_model='Cosine',
-                                             hfcut=128)
 
         output_file = os.path.join(DST_BASE_DIR,
                                    f.split('/')[-1].split('.')[0])

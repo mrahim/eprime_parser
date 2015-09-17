@@ -12,13 +12,20 @@ Data are saved in a csv file which contains:
 @author: Mehdi Rahim
 """
 
-import os, glob
+import os
+import glob
 import numpy as np
 import pandas as pd
+from configobj import ConfigObj
 
-BASE_DIR = os.path.join('/', 'home', 'Ppsypim', 'PSYDAT', 'Subjects')
-BASE_DIR = os.path.join('movement_files_caiman')
-DST_BASE_DIR = os.path.join('movement_files_caiman')
+if os.path.isfile('io_paths.ini'):
+    paths = ConfigObj(infile='io_paths.ini')
+    BASE_DIR = paths['movement_txt_dir']
+    DST_BASE_DIR = paths['movement_csv_dir']
+else:
+    BASE_DIR = 'movement_files_caiman'
+    DST_BASE_DIR = 'movement_files_caiman'
+
 
 def parse_spm_mvt_file(filename):
     """ returns a DataFrame df which contains the movement regressors
@@ -52,8 +59,6 @@ def parse_spm_mvt_file(filename):
 """ Parsing all the subjects and saving the regressors in a csv file
 """
 
-
-
 rp_files = glob.glob(os.path.join(BASE_DIR, '*.txt'))
 
 for rp_file in rp_files:
@@ -61,5 +66,5 @@ for rp_file in rp_files:
     subject = filename.split('_')[1][1:]
     print subject
     d = parse_spm_mvt_file(rp_file)
-    d.to_csv(os.path.join(DST_BASE_DIR,
-                          '_'.join([subject, 'reg.csv'])), sep=',')
+    d.to_csv(os.path.join(DST_BASE_DIR, '_'.join([subject, 'reg.csv'])),
+             sep=',')

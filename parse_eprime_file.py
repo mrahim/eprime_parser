@@ -13,8 +13,8 @@ from configobj import ConfigObj
 
 if os.path.isfile('io_paths.ini'):
     paths = ConfigObj(infile='io_paths.ini')
-    BASE_DIR = paths['input_dir']
-    DST_BASE_DIR = paths['output_dir']
+    BASE_DIR = paths['eprime_files_dir']
+    DST_BASE_DIR = paths['csv_output_dir']
 else:
     BASE_DIR = '/home/Ppsypim/CAIMAN/Stats/eprime/eprime_files'
     DST_BASE_DIR = 'eprime_files_caiman/csv'

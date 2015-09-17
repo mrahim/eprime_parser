@@ -5,9 +5,16 @@ Functions to extract the headers of all the subjects
 @author: Mehdi Rahim
 """
 
-import os, glob
+import os
+import glob
+from configobj import ConfigObj
 
-BASE_DIR = os.path.join('/', 'shfj', 'Ppsypim', 'PSYDAT', 'Stats', 'eprime')
+if os.path.isfile('io_paths.ini'):
+    paths = ConfigObj(infile='io_paths.ini')
+    BASE_DIR = paths['eprime_files_dir']
+else:
+    BASE_DIR = '/home/Ppsypim/PSYDAT/Stats/eprime'
+
 
 # Header Parsing Function
 def parse_header_eprime(filename):

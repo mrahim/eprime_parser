@@ -313,9 +313,11 @@ for f in file_list:
     subject_id, eprime_id = check_subject_eprime(f, mapping)
     subject_id = subject_id.astype(np.int)
 
+    print subject_id
     if len(subject_id) > 0:
         filepath = os.path.join(MVT_CSV_DIR,
                                 ''.join(['S', str(subject_id[0]), '_reg.csv']))
+        print filepath
         if os.path.isfile(filepath):
             reg = pd.read_csv(filepath)
             regressors = reg.values[:, 1:]

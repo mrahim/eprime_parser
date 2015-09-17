@@ -39,7 +39,7 @@ from configobj import ConfigObj
 if os.path.isfile('io_paths.ini'):
     paths = ConfigObj(infile='io_paths.ini')
     BASE_DIR = paths['csv_output_dir']
-    DST_BASE_DIR = paths['mat_output_dir']
+    DST_BASE_DIR = paths['matlab_output_dir']
     MAPPING_FILE = paths['subject_eprime_mapping']
     MVT_CSV_DIR = paths['movement_csv_dir']
     ANTICIP_DESIGN = False
